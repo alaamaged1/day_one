@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:day_one/model/news_model.dart';
 import 'package:flutter/material.dart';
 

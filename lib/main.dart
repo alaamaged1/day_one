@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  final email = preferences.getString("E-mail");
-  final password = preferences.getString("Password");
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SharedPreferences preferences = await SharedPreferences.getInstance();
+  // final email = preferences.getString("E-mail");
+  // final password = preferences.getString("Password");
 
-  runApp(email == null && password == null ? const MyApp() : const HomePage());
+  // runApp(email == null && password == null ? const MyApp() : const HomePage());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -20,22 +21,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  checkUser() async {
-    if (!mounted) return;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    final email = preferences.getString("E-mail");
-
-    final password = preferences.getString("Password");
-    return email == null && password == null
-        ? const RegisterPage()
-        : const HomePage();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Movies',
+      title: 'News',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

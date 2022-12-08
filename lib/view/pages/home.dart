@@ -1,7 +1,10 @@
 import 'package:day_one/controller/data_base.dart';
+import 'package:day_one/controller/database.dart';
+import 'package:day_one/controller/user_model.dart';
 import 'package:day_one/model/news_model.dart';
 import 'package:flutter/material.dart';
 
+import 'auth/register.dart';
 import 'details_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,13 +16,43 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   NewsController newsController = NewsController();
-  @override
+  SqlDb sqlDb = SqlDb();
+  Future<List<Map>> readData() async {
+    List<Map> response = await sqlDb.readData("SELECT * FROM notes");
+    return response;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-          appBar: AppBar(title: const Text('News App')),
+          drawer: Drawer(
+            child: FutureBuilder(
+              future: readData(),
+              builder: (context, AsyncSnapshot<List<Map>> snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return Text(snapshot.data![index]['email'].toString());
+                    },
+                  );
+                } else {
+                  return const CircularProgressIndicator();
+                }
+              },
+            ),
+          ),
+          appBar: AppBar(title: const Text('News App'), actions: [
+            Builder(builder: (context) {
+              return InkWell(
+                  onTap: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (context) => const RegisterPage())),
+                  child: const Text('Sign Out'));
+            }),
+          ]),
           body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: SafeArea(
@@ -32,6 +65,7 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.hasData) {
                           List<Articles>? articles = snapshot.data;
                           return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: articles!.length,
                             itemBuilder: (context, index) {

@@ -5,6 +5,7 @@ class AuthFormField extends StatelessWidget {
   final String hintText;
   final String validator;
   final TextEditingController controller;
+  final visible = false;
   const AuthFormField({
     Key? key,
     required this.label,
